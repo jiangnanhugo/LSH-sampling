@@ -3,7 +3,7 @@ import numpy.random as rand
 import numpy.linalg as lin
 import time
 from scipy.special import softmax as sftmx
-from QKattention import hyperplane_lsh
+from lsh_sampling_self_attention import hyperplane_lsh
 
 def softmax(x):
     c = np.tile(np.max(x, axis=1, keepdims=True), x.shape[1])
@@ -20,8 +20,8 @@ def normal_softmax(R):
 def lsh_softmax(R, seed=32):
     """
     reformer LSH attention implementation.
-    :param R:
-    :param seed:
+    :param R: the shared QK matrix
+    :param seed: random seef value
     :return:
     """
     rand.seed(seed=seed)
@@ -55,20 +55,21 @@ def lsh_softmax(R, seed=32):
 
     return Q
 
+
 if __name__ == "__main__":
-    L=100
-    dk=1024
+    L = 100
+    dk = 1024
     Q = np.random.randn(L, dk)
     V = np.random.randn(L, dk)
     start = time.time()
-    normal_sm = np.matmul(normal_softmax(Q),V)
+    normal_sm = np.matmul(normal_softmax(Q), V)
     print("numpy implemented self-attention time: {}".format(time.time() - start))
     start = time.time()
-    lsh_sm = np.matmul(lsh_softmax(Q),V)
+    lsh_sm = np.matmul(lsh_softmax(Q), V)
     print("reformer LSH self-attention time: {}".format(time.time() - start))
 
     start = time.time()
-    out = np.matmul(sftmx(np.matmul(Q, np.transpose(Q)), axis=1),V)
+    out = np.matmul(sftmx(np.matmul(Q, np.transpose(Q)), axis=1), V)
     print("scipy self-attention time: {}".format(time.time() - start))
     start = time.time()
     attention = np.zeros((L, dk))
