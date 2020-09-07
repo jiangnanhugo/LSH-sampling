@@ -18,6 +18,12 @@ def normal_softmax(R):
 
 
 def lsh_softmax(R, seed=32):
+    """
+    reformer LSH attention implementation.
+    :param R:
+    :param seed:
+    :return:
+    """
     rand.seed(seed=seed)
 
     N = R.shape[0]
@@ -50,7 +56,7 @@ def lsh_softmax(R, seed=32):
     return Q
 
 if __name__ == "__main__":
-    L=10000
+    L=100
     dk=1024
     Q = np.random.randn(L, dk)
     V = np.random.randn(L, dk)

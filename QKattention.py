@@ -5,7 +5,18 @@ from scipy.special import softmax
 # Hypercube LSH for approximate near neighbors
 # https://arxiv.org/pdf/1702.05760.pdf
 # it claims to works better than hyperplane LSH in larger d
+
 def hyperplane_lsh(Q, K, V, attention, L, dk):
+    """
+    Our implemented LSH attention.
+    :param Q:
+    :param K:
+    :param V:
+    :param attention:
+    :param L:
+    :param dk:
+    :return:
+    """
     # num_plane: number of planes
     num_plane = 3
     n_buckets = 2<< (num_plane-1)
@@ -34,11 +45,11 @@ def hyperplane_lsh(Q, K, V, attention, L, dk):
         v_vectors = V[K_buckets[i], :]
 
         block_qk=np.exp(np.dot(q_vectors, np.transpose(k_vectors)))
-        Z=1/np.sum(block_qk, axis=-1)
-        repeat_Z=np.tile(Z[:, np.newaxis], (1, len(K_buckets[i])))
-        normalized=np.multiply(block_qk,repeat_Z)
-        qkv = np.matmul(normalized,v_vectors)
-        attention[Q_buckets[i], :]=qkv
+        Z = 1/np.sum(block_qk, axis=-1)
+        repeat_Z = np.tile(Z[:, np.newaxis], (1, len(K_buckets[i])))
+        normalized = np.multiply(block_qk, repeat_Z)
+        qkv = np.matmul(normalized, v_vectors)
+        attention[Q_buckets[i], :] = qkv
 
 
 if __name__ == "__main__":
