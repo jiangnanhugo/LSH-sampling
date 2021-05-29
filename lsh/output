@@ -1,0 +1,4 @@
+numpy implemented self-attention time: 3.751697063446045
+reformer LSH self-attention time: 1.936828851699829
+scipy self-attention time: 4.236755847930908
+LSH-sampling self-attention time: 0.8282284736633301
